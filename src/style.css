@@ -101,11 +101,12 @@ h2 span { color: var(--muted); }
 .download-main::-webkit-details-marker { display: none; }
 .download-main:hover, .download-picker[open] .download-main { background: var(--accent-soft); }
 .download-picker[open] .download-main { border-radius: 6px 6px 0 0; }.download-picker[open] .download-main span { transform: rotate(180deg); }
-.download-disabled { color: var(--muted); cursor: not-allowed; }
+.download-picker-disabled .download-main { color: var(--muted); cursor: not-allowed; }
 .download-menu { position: absolute; right: 0; left: 0; z-index: 2; display: grid; grid-template-columns: 1fr; overflow: hidden; border: 1px solid var(--accent); border-top: 0; border-radius: 0 0 6px 6px; background: var(--bg); box-shadow: 0 14px 30px var(--shadow); text-align: left; }
 .download-menu a { min-height: 48px; display: flex; align-items: center; padding: 12px 14px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 11px; line-height: 1.45; transition: background .2s, color .2s; }.download-menu a:last-child { border-bottom: 0; }.download-menu a:hover { background: var(--accent-soft); color: var(--accent); }
 .other-downloads { display: inline-flex; align-items: center; gap: 14px; margin-top: 16px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 5px; color: var(--muted); font: 11px 'DM Mono', monospace; transition: border-color .2s, color .2s, background .2s; }
 .other-downloads span { color: var(--accent); font-size: 16px; }.other-downloads:hover { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+.other-downloads-disabled { cursor: not-allowed; }
 footer { display: flex; justify-content: center; padding-top: 22px; padding-bottom: 22px; border-top: 1px solid var(--line); color: var(--muted); font: 10px 'DM Mono', monospace; text-transform: uppercase; letter-spacing: .1em; }
 @media (max-width: 700px) {
   .site-header, main, footer { padding-inline: 22px; }

@@ -14,7 +14,7 @@ const detectedOs = platform.includes('win') || userAgent.includes('windows')
 
 const downloadLabel = detectedOs
   ? `Download Actinium for ${detectedOs}`
-  : 'Unsupported Operating System'
+  : 'Unsupported'
 
 const sunIcon = `
   <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -26,6 +26,26 @@ const moonIcon = `
   <svg viewBox="0 0 24 24" aria-hidden="true">
     <path d="M20.2 15.4A8.5 8.5 0 0 1 8.6 3.8 8.5 8.5 0 1 0 20.2 15.4Z"></path>
   </svg>`
+
+const downloadPickerMarkup = detectedOs
+  ? `
+      <details class="download-picker">
+        <summary class="download-main">${downloadLabel}<span>⌄</span></summary>
+        <div class="download-menu" aria-label="Other downloads">
+          <a href="#" id="linux-tarball">Linux (.tar.gz)</a>
+          <a href="#" id="macos-app">macOS App (Universal)</a>
+          <a href="#" id="macos-dmg">macOS (.dmg)</a>
+          <a href="#" id="windows-portable">Windows Portable</a>
+          <a href="#" id="windows-msi">Windows Installer</a>
+          <a href="#" id="linux-deb">Debian / Ubuntu (.deb)</a>
+          <a href="#" id="linux-rpm">Fedora / RHEL (.rpm)</a>
+        </div>
+      </details>`
+  : '<div class="download-picker download-picker-disabled"><div class="download-main" aria-disabled="true">Unsupported</div></div>'
+
+const otherDownloadsMarkup = detectedOs
+  ? '<a class="other-downloads" href="https://github.com/SyrupStudio/Actinium/releases/latest" target="_blank" rel="noopener noreferrer">Other downloads <span>↗</span></a>'
+  : '<span class="other-downloads other-downloads-disabled" aria-disabled="true">Other downloads <span>↗</span></span>'
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <header class="site-header">
@@ -47,20 +67,9 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     <section class="download-page" id="download">
       <div class="download-logo"><img src="${import.meta.env.BASE_URL}logo.png" alt="Actinium logo" /></div>
       <h1>Download<br><em>Actinium.</em></h1>
-      <details class="download-picker">
-        <summary class="download-main ${detectedOs ? '' : 'download-disabled'}">${downloadLabel}<span>⌄</span></summary>
-        <div class="download-menu" aria-label="Other downloads">
-          <a href="#" id="linux-tarball">Linux (.tar.gz)</a>
-          <a href="#" id="macos-app">macOS App (Universal)</a>
-          <a href="#" id="macos-dmg">macOS (.dmg)</a>
-          <a href="#" id="windows-portable">Windows Portable</a>
-          <a href="#" id="windows-msi">Windows Installer</a>
-          <a href="#" id="linux-deb">Debian / Ubuntu (.deb)</a>
-          <a href="#" id="linux-rpm">Fedora / RHEL (.rpm)</a>
-        </div>
-      </details>
-      <a class="other-downloads" href="https://github.com/SyrupStudio/Actinium/releases/latest" target="_blank" rel="noopener noreferrer">Other downloads <span>↗</span></a>
-      <p class="download-note">You’ll be redirected to the GitHub release page.</p>
+      ${downloadPickerMarkup}
+      ${otherDownloadsMarkup}
+      <p class="download-note">${detectedOs ? 'You’ll be redirected to the GitHub release page.' : 'Downloads are not available for this operating system.'}</p>
     </section>
   </main>
 
@@ -121,6 +130,8 @@ type GitHubRelease = {
 }
 
 const setupDownloads = async () => {
+  if (!detectedOs) return
+
   try {
     const response = await fetch(releasesApi)
     if (!response.ok) {
